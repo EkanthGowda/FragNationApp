@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-	baseURL: import.meta.env.MODE === "development" ? "http://localhost:5003/api/v1" : "/api/v1",
-	withCredentials: true,
+  baseURL: "https://fragnation-api.onrender.com/api/v1",
+  withCredentials: true,
 });
