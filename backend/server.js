@@ -19,13 +19,17 @@ const PORT = process.env.PORT || 5003;
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV !== "production") {
-	app.use(
-		cors({
-			origin: "http://localhost:5173",
-			credentials: true,
-		})
-	);
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL,
+      credentials: true,
+    })
+  );
 }
+
+app.use("/api", (req, res) => {
+  res.send("welcome to fragnation api");
+});
 
 app.use(express.json({ limit: "100mb" })); // parse JSON request bodies
 app.use(cookieParser());
@@ -37,22 +41,21 @@ app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/connections", connectionRoutes);
 
 if (process.env.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-	});
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
 }
 
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
-	connectDB();
+  console.log(`Server running on port ${PORT}`);
+  connectDB();
 });
 import tournamentRoutes from "./routes/tournament.route.js";
 
 // Add this with your other route imports
 app.use("/api/v1/tournaments", tournamentRoutes);
-
 
 /////////////////////
 
