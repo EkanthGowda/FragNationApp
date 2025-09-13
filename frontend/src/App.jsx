@@ -12,8 +12,10 @@ import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
 import LiveStreamingPage from "./pages/LiveStreamingPage";
 import TournamentsPage from "./pages/TournamentsPage";
-import SettingsPage from "./pages/SettingsPage";  // Import the SettingsPage component
+import SettingsPage from "./pages/SettingsPage";
 import ShopPage from "./pages/ShopPage";
+import ErrorBoundary from "./components/ErrorBoundary";
+
 function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
@@ -33,22 +35,50 @@ function App() {
   if (isLoading) return null;
 
   return (
-    <Layout>
-      <Routes>
-        <Route path='/' element={authUser ? <HomePage /> : <Navigate to={"/login"} />} />
-        <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />} />
-        <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to={"/"} />} />
-        <Route path='/notifications' element={authUser ? <NotificationsPage /> : <Navigate to={"/login"} />} />
-        <Route path='/network' element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />} />
-        <Route path='/post/:postId' element={authUser ? <PostPage /> : <Navigate to={"/login"} />} />
-        <Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
-        <Route path="/live-streaming" element={<LiveStreamingPage />} />
-        <Route path="/tournaments" element={<TournamentsPage />} />
-        <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to={"/login"} />} /> {/* Added Settings route */}
-        <Route path="/shop" element={<ShopPage />} />
-      </Routes>
-      <Toaster />
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Routes>
+          <Route
+            path="/"
+            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/signup"
+            element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+          />
+          <Route
+            path="/login"
+            element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
+          />
+          <Route
+            path="/notifications"
+            element={
+              authUser ? <NotificationsPage /> : <Navigate to={"/login"} />
+            }
+          />
+          <Route
+            path="/network"
+            element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/post/:postId"
+            element={authUser ? <PostPage /> : <Navigate to={"/login"} />}
+          />
+          <Route
+            path="/profile/:username"
+            element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
+          />
+          <Route path="/live-streaming" element={<LiveStreamingPage />} />
+          <Route path="/tournaments" element={<TournamentsPage />} />
+          <Route
+            path="/settings"
+            element={authUser ? <SettingsPage /> : <Navigate to={"/login"} />}
+          />
+          <Route path="/shop" element={<ShopPage />} />
+        </Routes>
+        <Toaster />
+      </Layout>
+    </ErrorBoundary>
   );
 }
 
